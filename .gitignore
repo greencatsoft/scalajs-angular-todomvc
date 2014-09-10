@@ -1,0 +1,7 @@
+target
+.history
+
+# IntelliJ
+.idea
+.idea_modules
+atlassian-ide-plugin.xml

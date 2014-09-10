@@ -1,0 +1,10 @@
+GET				/																controllers.TodoController.home
+GET				/api/todos											controllers.TodoController.list
+PUT				/api/todos											controllers.TodoController.create
+POST			/api/todos/markAll							controllers.TodoController.markAll(completed: Boolean)
+POST			/api/todos/clearAll							controllers.TodoController.clearAll
+
+POST			/api/todos/:id									controllers.TodoController.update(id: Long)
+DELETE		/api/todos/:id									controllers.TodoController.delete(id: Long)
+
+GET				/assets/*file										controllers.Assets.versioned(path="/public", file: Asset)

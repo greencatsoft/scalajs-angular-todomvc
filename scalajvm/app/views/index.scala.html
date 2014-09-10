@@ -1,0 +1,61 @@
+@()
+<!DOCTYPE html>
+<html lang="en" ng-app="todomvc" data-framework="angularjs">
+<head>
+  <meta charset="utf-8">
+  <title>AngularJS Binding for Scala.js :: TodoMVC Example</title>
+
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <script src="@routes.Assets.versioned("lib/jquery/jquery.js")"></script>
+  <script src="@routes.Assets.versioned("lib/angularjs/angular.js")"></script>
+  <script src="@routes.Assets.versioned("javascripts/todomvc-client-fastopt.js")"></script>
+  <script src="@routes.Assets.versioned("javascripts/todomvc-client-launcher.js")"></script>
+  <style>[ng-cloak] { display: none; }</style>
+</head>
+<body>
+<section id="todoapp" ng-controller="TodoCtrl">
+  <header id="header" todo-test="test">
+    <h1>todos</h1>
+    <form id="todo-form" ng-submit="controller.add()">
+      <input id="new-todo" placeholder="What needs to be done?" ng-model="newTitle" autofocus />
+    </form>
+  </header>
+  <section id="main" ng-show="todos.length" ng-cloak>
+    <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="controller.markAll(allChecked)">
+    <label for="toggle-all">Mark all as complete</label>
+    <ul id="todo-list">
+      <li ng-repeat="todo in todos | filter:statusFilter track by $index" 
+        ng-class="{completed: todo.completed}">
+        <todo-item item="todo" on-change="controller.save(todo)" on-remove="controller.remove(todo)" />
+      </li>
+    </ul>
+  </section>
+  <footer id="footer" ng-show="todos.length" ng-cloak>
+    <span id="todo-count"><strong>{{remainingCount}}</strong>
+      <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+    </span>
+    <ul id="filters">
+      <li>
+        <a ng-class="{selected: location.path() == '/'} " href="#/">All</a>
+      </li>
+      <li>
+        <a ng-class="{selected: location.path() == '/active'}" href="#/active">Active</a>
+      </li>
+      <li>
+        <a ng-class="{selected: location.path() == '/completed'}" href="#/completed">Completed</a>
+      </li>
+    </ul>
+    <button id="clear-completed" ng-click="controller.clearCompleted()" 
+      ng-show="remainingCount < todos.length">
+      Clear completed ({{todos.length - remainingCount}})</button>
+  </footer>
+</section>
+<footer id="info">
+  <p>Double-click to edit a todo</p>
+  <p>Created with 
+    <a href="https://github.com/greencatsoft/scalajs-angular">scalajs-angular</a>
+  </p>
+  <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+</footer>
+</body>
+</html>

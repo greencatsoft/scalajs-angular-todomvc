@@ -1,0 +1,11 @@
+<div class="view">
+  <input class="toggle" type="checkbox" ng-model="todo.completed" 
+    ng-change="fireOnChange()" />
+  <label ng-dblclick="directive.onEditStart(this)" ng-show="!editing">{{todo.title}}</label>
+  <button class="destroy" ng-click="fireOnRemove()"></button>
+</div>
+<form ng-submit="directive.onEditEnd(this)">
+  <input class="edit" ng-trim="false" ng-model="title" 
+    ng-blur="directive.onEditEnd(this)" 
+    todo-escape="directive.onEditCancel(this)" todo-focus="editing" ng-show="editing" />
+</form>

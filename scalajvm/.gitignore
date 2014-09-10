@@ -1,0 +1,9 @@
+bin
+logs
+target
+.cache
+
+# Eclipse
+.project
+.classpath
+.settings
