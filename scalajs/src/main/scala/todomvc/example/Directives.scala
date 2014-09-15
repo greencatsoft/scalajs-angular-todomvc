@@ -8,6 +8,7 @@ import scala.scalajs.js.annotation.{ JSBracketAccess, JSExport, JSExportAll }
 
 import org.scalajs.dom.{ Element, HTMLElement, KeyboardEvent }
 
+import com.greencatsoft.angularjs.controller.Controller
 import com.greencatsoft.angularjs.directive.{ AttributeDirective, Attributes, ElementDirective, IsolatedScope, TemplateUrlProvider }
 import com.greencatsoft.angularjs.scope.Scope
 import com.greencatsoft.angularjs.timer.TimeoutAware
@@ -62,7 +63,7 @@ object EscapeDirective extends AttributeDirective {
 
   override val name = "todoEscape"
 
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller*) {
     elems.headOption.map(_.asInstanceOf[HTMLElement]) foreach { elem =>
       elem.onkeydown = (event: KeyboardEvent) =>
         if (event.keyCode == 27) scope.$apply(attrs(name))
@@ -74,7 +75,7 @@ object FocusDirective extends AttributeDirective with TimeoutAware {
 
   override val name = "todoFocus"
 
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller*) {
     elems.headOption.map(_.asInstanceOf[HTMLElement]) foreach { elem =>
 
       scope.$watch(attrs(name),
