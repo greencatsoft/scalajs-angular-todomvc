@@ -30,9 +30,10 @@ object ApplicationBuild extends Build with UniversalKeys {
       name := "todomvc-server",
       version := Versions.app,
       scalaVersion := Versions.scala,
+      scalacOptions ++= Seq("-feature","-deprecation"),
       scalajsOutputDir := (crossTarget in Compile).value / "classes" / "public" / "javascripts",
       compile in Compile <<= 
-        (compile in Compile) dependsOn (packageJS in (scalajs, Compile), fastOptJS in (scalajs, Compile)),
+        (compile in Compile) dependsOn (fastOptJS in (scalajs, Compile)),
       dist <<= dist dependsOn (fullOptJS in (scalajs, Compile)),
       libraryDependencies ++= Seq(
         jdbc,
@@ -55,6 +56,7 @@ object ApplicationBuild extends Build with UniversalKeys {
       name := "todomvc-client",
       version := Versions.app,
       scalaVersion := Versions.scala,
+      scalacOptions ++= Seq("-feature","-deprecation"),
       persistLauncher := true,
       persistLauncher in Test := false,
       libraryDependencies ++= Seq(
@@ -80,6 +82,6 @@ object ApplicationBuild extends Build with UniversalKeys {
 object Versions {
   val app = "0.2-SNAPSHOT"
   val library = "0.2-SNAPSHOT"
-  val scala = "2.11.1"
+  val scala = "2.11.2"
   val pickling = "0.3.1"
 }

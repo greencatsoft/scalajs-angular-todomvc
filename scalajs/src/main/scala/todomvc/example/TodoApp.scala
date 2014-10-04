@@ -15,7 +15,7 @@ import com.greencatsoft.angularjs.http.HttpProviderAware
 object TodoApp extends JSApp with HttpProviderAware {
 
   override def main() {
-    val app = angular.module("todomvc", Array.empty[String])
+    val app = angular.module("todomvc", js.Array[String]())
 
     // Module(app) returns a proxy for our module that provides the bridge for integration
     // between standard AngularJS and our typesafe + 'fluent' scalajs-angular bindings
