@@ -30,14 +30,13 @@ object ApplicationBuild extends Build with UniversalKeys {
       name := "todomvc-server",
       version := Versions.app,
       scalaVersion := Versions.scala,
-      scalacOptions ++= Seq("-feature","-deprecation"),
       scalajsOutputDir := (crossTarget in Compile).value / "classes" / "public" / "javascripts",
       compile in Compile <<= 
         (compile in Compile) dependsOn (fastOptJS in (scalajs, Compile)),
       dist <<= dist dependsOn (fullOptJS in (scalajs, Compile)),
       libraryDependencies ++= Seq(
         jdbc,
-        "org.scalajs" %% "scalajs-pickling-play-json" % Versions.pickling,
+        "com.github.benhutchison" %% "prickle" % Versions.prickle,
         "org.squeryl" %% "squeryl" % "0.9.5-7",
         "org.webjars" % "jquery" % "2.1.1",
         "org.webjars" % "angularjs" % "1.3.0-rc.0"
@@ -56,12 +55,11 @@ object ApplicationBuild extends Build with UniversalKeys {
       name := "todomvc-client",
       version := Versions.app,
       scalaVersion := Versions.scala,
-      scalacOptions ++= Seq("-feature","-deprecation"),
       persistLauncher := true,
       persistLauncher in Test := false,
       libraryDependencies ++= Seq(
         "com.greencatsoft" %%% "scalajs-angular" % Versions.library,
-        "org.scalajs" %%% "scalajs-pickling" % Versions.pickling,
+        "com.github.benhutchison" %%% "prickle" % Versions.prickle,
         "org.scala-lang.modules.scalajs" %% "scalajs-jasmine-test-framework" % scalaJSVersion % "test"
       )
     )
@@ -83,5 +81,5 @@ object Versions {
   val app = "0.2-SNAPSHOT"
   val library = "0.2-SNAPSHOT"
   val scala = "2.11.2"
-  val pickling = "0.3.1"
+  val prickle = "1.0.1"
 }

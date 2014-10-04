@@ -1,20 +1,14 @@
-import scala.annotation.implicitNotFound
-
-import org.scalajs.spickling.PicklerRegistry
 import org.squeryl.{ Session, SessionFactory }
 import org.squeryl.internals.DatabaseAdapter
 
 import play.api
 import play.api.{ GlobalSettings, Logger }
 import play.api.db.DB
-import todomvc.example.Task
 
 object Application extends GlobalSettings {
 
   override def onStart(app: api.Application) {
     Logger.info("Starting TodoMVC application.")
-
-    PicklerRegistry.register[Task]
 
     initializeDatabase(app)
   }

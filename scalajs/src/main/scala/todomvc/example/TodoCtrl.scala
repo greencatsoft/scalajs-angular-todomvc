@@ -1,10 +1,8 @@
 package todomvc.example
 
-import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 import scala.scalajs.js
-import scala.scalajs.js.Any.{ fromBoolean, fromFunction1, fromLong, fromString, jsArrayOps, wrapArray }
-import scala.scalajs.js.Date
+import scala.scalajs.js.Any.{ fromBoolean, fromFunction1, fromString, jsArrayOps, wrapArray }
 import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
 import scala.scalajs.js.UndefOr
@@ -50,14 +48,9 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
         case _ => literal()
       })
 
-    // Append a timestamp to prevent some old browsers from caching the result.
-    val ts = Date.now
-
-    val future: Future[js.Array[Task]] = http.get(s"/api/todos?ts=$ts")
-
-    future onComplete {
+    TaskService.findAll() onComplete {
       case Success(tasks) =>
-        scope.todos = tasks
+        scope.todos = tasks.toJSArray
         update()
       case Failure(t) => handleError(t)
     }
@@ -65,9 +58,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def save(todo: Task) {
-    val param = todo.asInstanceOf[js.Object]
-
-    http.post(s"/api/todos/${todo.id}", param) onComplete {
+    TaskService.update(todo) onComplete {
       case Success(_) => update()
       case Failure(t) => handleError(t)
     }
@@ -79,12 +70,8 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
     if (title != "") add(Task(title), scope)
   }
 
-  private def add(task: Task, scope: ScopeType) {
-    val param = task.asInstanceOf[js.Object]
-
-    val future: Future[Task] = http.put(s"/api/todos", param)
-
-    future onComplete {
+  private def add(todo: Task, scope: ScopeType) {
+    TaskService.create(todo) onComplete {
       case Success(newTask) =>
         scope.todos :+= newTask
         scope.newTitle = ""
@@ -96,7 +83,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def remove(todo: Task): Unit = currentScope foreach { implicit scope =>
-    http.delete(s"/api/todos/${todo.id}") onComplete {
+    TaskService.delete(todo.id) onComplete {
       case Success(_) =>
         scope.todos = todos.filter(_ != todo).toJSArray
         update()
@@ -106,7 +93,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def clearCompleted(): Unit = currentScope foreach { implicit scope =>
-    http.post("/api/todos/clearAll") onComplete {
+    TaskService.clearAll() onComplete {
       case Success(_) =>
         scope.todos = todos.filter(!_.completed).toJSArray
         update()
@@ -116,7 +103,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def markAll(completed: Boolean): Unit = currentScope foreach { implicit scope =>
-    http.post(s"/api/todos/markAll?completed=${!completed}") onComplete {
+    TaskService.markAll(completed) onComplete {
       case Success(_) =>
         todos.foreach(_.completed = !completed)
         update()

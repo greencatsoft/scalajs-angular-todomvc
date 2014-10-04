@@ -1,36 +1,37 @@
 package controllers
 
-import play.api.libs.json.Json.toJson
+import scala.util.{ Failure, Success }
+
+import play.api.libs.json.JsObject
 import play.api.mvc.{ Action, Controller }
+import prickle.{ Pickle, Unpickle }
 import todomvc.example.{ Task, TaskStore }
 import views.html.index
 
 object TodoController extends Controller {
-
-  import org.scalajs.spickling.playjson._
 
   def home() = Action {
     Ok(index())
   }
 
   def list() = Action {
-    Ok(toJson(TaskStore.findAll))
+    Ok(Pickle.intoString(TaskStore.findAll))
   }
 
-  def create() = Action(parse.json) { request =>
-    val task = request.body.as[Task]
+  def create() = process(TaskStore.create(_))
 
-    TaskStore.create(task)
+  def update(id: Long) = process(TaskStore.update(_))
 
-    Ok(toJson(task))
-  }
+  def process(updater: Task => Unit) = Action(parse.json) { request =>
+    val data = request.body.as[JsObject]
 
-  def update(id: Long) = Action(parse.json) { request =>
-    val task = request.body.as[Task]
-
-    TaskStore.update(task)
-
-    Ok(toJson(task))
+    Unpickle[Task].fromString(data.toString) match {
+      case Success(task) =>
+        updater(task)
+        Ok(Pickle.intoString(task))
+      case Failure(e) =>
+        BadRequest(s"Failed to parse request : $e")
+    }
   }
 
   def delete(id: Long) = Action {
