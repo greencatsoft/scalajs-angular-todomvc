@@ -5,12 +5,14 @@ import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 import scala.scalajs.js
 import scala.scalajs.js.{ Date, JSON }
+import scala.scalajs.js.Any.fromString
 import scala.util.{ Failure, Success, Try }
+
 import com.greencatsoft.angularjs.http.HttpPromise.promise2future
 import com.greencatsoft.angularjs.http.HttpService
+
 import microjson.{ JsValue, Json }
-import prickle.{ PConfig, Unpickle }
-import prickle.Pickle
+import prickle.{ PConfig, Pickle, Unpickle }
 
 object TaskService {
 
@@ -27,7 +29,7 @@ object TaskService {
 
   def fromString(json: String, state: mutable.Map[String, Any] = mutable.Map.empty)(implicit config: PConfig[JsValue]): Try[Task] = {
     Try(Json.read(json)).flatMap(jsValue =>
-      TaskUnpickler.unpickle(jsValue, state)(config))
+      Unpickle[Task].from(jsValue, state)(config))
   }
 
   def create(task: Task)(implicit http: HttpService): Future[Task] = flatten {
