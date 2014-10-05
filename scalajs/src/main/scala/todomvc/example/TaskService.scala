@@ -27,11 +27,6 @@ object TaskService {
       .map(Unpickle[Seq[Task]].fromString(_))
   }
 
-  def fromString(json: String, state: mutable.Map[String, Any] = mutable.Map.empty)(implicit config: PConfig[JsValue]): Try[Task] = {
-    Try(Json.read(json)).flatMap(jsValue =>
-      Unpickle[Task].from(jsValue, state)(config))
-  }
-
   def create(task: Task)(implicit http: HttpService): Future[Task] = flatten {
     require(task != null, "Missing argument 'task'.")
 
