@@ -8,3 +8,6 @@ POST		/api/todos/:id				controllers.TodoController.update(id: Long)
 DELETE		/api/todos/:id				controllers.TodoController.delete(id: Long)
 
 GET			/assets/*file				controllers.Assets.versioned(path="/public", file: Asset)
+
+GET			/scalajs/*file				controllers.SourceMapProvider.client(file)
+GET			/scala/*file				controllers.SourceMapProvider.common(file)

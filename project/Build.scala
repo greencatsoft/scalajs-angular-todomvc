@@ -11,6 +11,10 @@ import PlayKeys._
 
 object ApplicationBuild extends Build with UniversalKeys {
 
+  scalaVersion in ThisBuild := "2.11.2"
+
+  scalacOptions in ThisBuild ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite")
+
   val scalajsOutputDir = Def.settingKey[File]("Directory for Javascript files output by ScalaJS")
 
   override def rootProject = Some(scalajvm)
@@ -22,8 +26,12 @@ object ApplicationBuild extends Build with UniversalKeys {
 
   lazy val scalajs = Project(
     id   = "scalajs",
-    base = file("scalajs")
-  ) settings (scalajsSettings: _*)
+    base = file("scalajs"))
+  .settings(scalajsSettings: _*)
+  .settings(
+    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite"),
+    relativeSourceMaps := true
+  )
 
   lazy val scalajvmSettings =
     Seq(

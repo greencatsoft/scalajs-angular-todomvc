@@ -3,15 +3,14 @@ package todomvc.example
 import scala.scalajs.js
 import scala.scalajs.js.Any.{ fromFunction0, fromFunction1, fromString }
 import scala.scalajs.js.UndefOr
-import scala.scalajs.js.UndefOr.undefOr2ops
-import scala.scalajs.js.annotation.{ JSBracketAccess, JSExport, JSExportAll }
+import scala.scalajs.js.UndefOr.{ undefOr2jsAny, undefOr2ops }
+import scala.scalajs.js.annotation.JSExport
 
 import org.scalajs.dom.{ Element, HTMLElement, KeyboardEvent }
 
-import com.greencatsoft.angularjs.controller.Controller
-import com.greencatsoft.angularjs.directive.{ AttributeDirective, Attributes, ElementDirective, IsolatedScope, TemplateUrlProvider }
-import com.greencatsoft.angularjs.scope.Scope
-import com.greencatsoft.angularjs.timer.TimeoutAware
+import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, Controller, ElementDirective, IsolatedScope, TemplateUrlProvider }
+import com.greencatsoft.angularjs.core.{ Scope, Timeout }
+import com.greencatsoft.angularjs.inject
 
 @JSExport
 object TodoItemDirective extends ElementDirective with TemplateUrlProvider with IsolatedScope {
@@ -71,9 +70,12 @@ object EscapeDirective extends AttributeDirective {
   }
 }
 
-object FocusDirective extends AttributeDirective with TimeoutAware {
+object FocusDirective extends AttributeDirective {
 
   override val name = "todoFocus"
+
+  @inject
+  var timeout: Timeout = _
 
   override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller*) {
     elems.headOption.map(_.asInstanceOf[HTMLElement]) foreach { elem =>

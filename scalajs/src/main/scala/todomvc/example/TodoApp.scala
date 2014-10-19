@@ -14,8 +14,12 @@ object TodoApp extends JSApp {
 
     // Module(app) returns a proxy for our module that provides the bridge for integration
     // between standard AngularJS and our typesafe + 'fluent' scalajs-angular bindings
-    Module(app)
-      .controller(TodoCtrl)
-      .directive(TodoItemDirective, EscapeDirective, FocusDirective)
+    val module = Module(app)
+
+    module.controller(TodoCtrl)
+    module.directive(TodoItemDirective)
+    module.directive(EscapeDirective)
+    module.directive(FocusDirective)
+    module.factory(TaskServiceFactory)
   }
 }

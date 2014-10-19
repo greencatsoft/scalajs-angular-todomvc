@@ -1,22 +1,25 @@
 package todomvc.example
 
-import scala.collection.mutable
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 import scala.scalajs.js
 import scala.scalajs.js.{ Date, JSON }
 import scala.scalajs.js.Any.fromString
+import scala.scalajs.js.annotation.JSExportAll
 import scala.util.{ Failure, Success, Try }
 
-import com.greencatsoft.angularjs.http.HttpPromise.promise2future
-import com.greencatsoft.angularjs.http.HttpService
+import com.greencatsoft.angularjs.Factory
+import com.greencatsoft.angularjs.core.HttpPromise.promise2future
+import com.greencatsoft.angularjs.core.HttpService
+import com.greencatsoft.angularjs.{ inject, injectable }
 
-import microjson.{ JsValue, Json }
-import prickle.{ PConfig, Pickle, Unpickle }
+import prickle.{ Pickle, Unpickle }
 
-object TaskService {
+@injectable("$taskService")
+class TaskService(val http: HttpService) {
+  require(http != null, "Missing argument 'http'.")
 
-  def findAll()(implicit http: HttpService): Future[Seq[Task]] = flatten {
+  def findAll(): Future[Seq[Task]] = flatten {
     // Append a timestamp to prevent some old browsers from caching the result.
     val url = parameterizeUrl("/api/todos", Map("ts" -> Date.now))
 
@@ -27,7 +30,7 @@ object TaskService {
       .map(Unpickle[Seq[Task]].fromString(_))
   }
 
-  def create(task: Task)(implicit http: HttpService): Future[Task] = flatten {
+  def create(task: Task): Future[Task] = flatten {
     require(task != null, "Missing argument 'task'.")
 
     val future: Future[js.Any] = http.put(s"/api/todos", Pickle.intoString(task))
@@ -37,7 +40,7 @@ object TaskService {
       .map(Unpickle[Task].fromString(_))
   }
 
-  def update(task: Task)(implicit http: HttpService): Future[Task] = flatten {
+  def update(task: Task): Future[Task] = flatten {
     require(task != null, "Missing argument 'task'.")
 
     val future: Future[js.Any] = http.post(s"/api/todos/${task.id}", Pickle.intoString(task))
@@ -47,11 +50,11 @@ object TaskService {
       .map(Unpickle[Task].fromString(_))
   }
 
-  def delete(id: Long)(implicit http: HttpService): Future[Unit] = http.delete(s"/api/todos/$id")
+  def delete(id: Long): Future[Unit] = http.delete(s"/api/todos/$id")
 
-  def clearAll()(implicit http: HttpService): Future[Unit] = http.post("/api/todos/clearAll")
+  def clearAll(): Future[Unit] = http.post("/api/todos/clearAll")
 
-  def markAll(completed: Boolean)(implicit http: HttpService): Future[Unit] =
+  def markAll(completed: Boolean): Future[Unit] =
     http.post(s"/api/todos/markAll?completed=${!completed}")
 
   protected def parameterizeUrl(url: String, parameters: Map[String, Any]): String = {
@@ -68,4 +71,14 @@ object TaskService {
       case Failure(f) => Future.failed(f)
     }
   }
+}
+
+object TaskServiceFactory extends Factory[TaskService] {
+
+  override val name = "$taskService"
+
+  @inject
+  var http: HttpService = _
+
+  override def apply(): TaskService = new TaskService(http)
 }

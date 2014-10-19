@@ -7,16 +7,14 @@ import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.undefOr2ops
-import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
+import scala.scalajs.js.annotation.JSExport
 import scala.util.{ Failure, Success }
 
 import org.scalajs.dom.console
 
-import com.greencatsoft.angularjs.controller.AbstractController
-import com.greencatsoft.angularjs.http.HttpPromise.promise2future
-import com.greencatsoft.angularjs.http.HttpServiceAware
-import com.greencatsoft.angularjs.location.{ Location, LocationAware }
-import com.greencatsoft.angularjs.scope.Scope
+import com.greencatsoft.angularjs.AbstractController
+import com.greencatsoft.angularjs.core.{ HttpService, Location, Scope }
+import com.greencatsoft.angularjs.inject
 
 /**
  * The main controller for the application.
@@ -31,7 +29,13 @@ import com.greencatsoft.angularjs.scope.Scope
  * we mix in traits like `HttpServiceAware` to request these dependencies''
  */
 @JSExport
-object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware with LocationAware {
+object TodoCtrl extends AbstractController("TodoCtrl") {
+
+  @inject
+  var location: Location = _
+
+  @inject
+  var service: TaskService = _
 
   override def initialize(scope: ScopeType) {
     // Need to initialize scope properties here, since we cannot declare default values  
@@ -48,7 +52,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
         case _ => literal()
       })
 
-    TaskService.findAll() onComplete {
+    service.findAll() onComplete {
       case Success(tasks) =>
         scope.todos = tasks.toJSArray
         update()
@@ -58,7 +62,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def save(todo: Task) {
-    TaskService.update(todo) onComplete {
+    service.update(todo) onComplete {
       case Success(_) => update()
       case Failure(t) => handleError(t)
     }
@@ -71,7 +75,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
   }
 
   private def add(todo: Task, scope: ScopeType) {
-    TaskService.create(todo) onComplete {
+    service.create(todo) onComplete {
       case Success(newTask) =>
         scope.todos :+= newTask
         scope.newTitle = ""
@@ -83,7 +87,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def remove(todo: Task): Unit = currentScope foreach { implicit scope =>
-    TaskService.delete(todo.id) onComplete {
+    service.delete(todo.id) onComplete {
       case Success(_) =>
         scope.todos = todos.filter(_ != todo).toJSArray
         update()
@@ -93,7 +97,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def clearCompleted(): Unit = currentScope foreach { implicit scope =>
-    TaskService.clearAll() onComplete {
+    service.clearAll() onComplete {
       case Success(_) =>
         scope.todos = todos.filter(!_.completed).toJSArray
         update()
@@ -103,7 +107,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") with HttpServiceAware wit
 
   @JSExport
   def markAll(completed: Boolean): Unit = currentScope foreach { implicit scope =>
-    TaskService.markAll(completed) onComplete {
+    service.markAll(completed) onComplete {
       case Success(_) =>
         todos.foreach(_.completed = !completed)
         update()
