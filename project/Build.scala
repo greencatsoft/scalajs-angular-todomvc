@@ -29,7 +29,6 @@ object ApplicationBuild extends Build with UniversalKeys {
     base = file("scalajs"))
   .settings(scalajsSettings: _*)
   .settings(
-    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite"),
     relativeSourceMaps := true
   )
 
