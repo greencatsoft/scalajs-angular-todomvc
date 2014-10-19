@@ -69,7 +69,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") {
   }
 
   @JSExport
-  def add(): Unit = currentScope foreach { scope =>
+  def add() {
     val title = scope.newTitle.trim
     if (title != "") add(Task(title), scope)
   }
@@ -86,7 +86,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") {
   }
 
   @JSExport
-  def remove(todo: Task): Unit = currentScope foreach { implicit scope =>
+  def remove(todo: Task) {
     service.delete(todo.id) onComplete {
       case Success(_) =>
         scope.todos = todos.filter(_ != todo).toJSArray
@@ -96,7 +96,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") {
   }
 
   @JSExport
-  def clearCompleted(): Unit = currentScope foreach { implicit scope =>
+  def clearCompleted() {
     service.clearAll() onComplete {
       case Success(_) =>
         scope.todos = todos.filter(!_.completed).toJSArray
@@ -106,7 +106,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") {
   }
 
   @JSExport
-  def markAll(completed: Boolean): Unit = currentScope foreach { implicit scope =>
+  def markAll(completed: Boolean) {
     service.markAll(completed) onComplete {
       case Success(_) =>
         todos.foreach(_.completed = !completed)
@@ -115,7 +115,7 @@ object TodoCtrl extends AbstractController("TodoCtrl") {
     }
   }
 
-  private def update(): Unit = currentScope foreach { implicit scope =>
+  private def update() {
     scope.remainingCount = todos.count(!_.completed)
     scope.allChecked = scope.remainingCount == 0
   }
