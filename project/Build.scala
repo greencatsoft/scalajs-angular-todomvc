@@ -64,6 +64,7 @@ object ApplicationBuild extends Build with UniversalKeys {
       scalaVersion := Versions.scala,
       persistLauncher := true,
       persistLauncher in Test := false,
+      resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       libraryDependencies ++= Seq(
         "com.greencatsoft" %%% "scalajs-angular" % Versions.library,
         "com.github.benhutchison" %%% "prickle" % Versions.prickle,
