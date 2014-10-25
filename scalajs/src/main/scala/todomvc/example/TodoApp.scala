@@ -4,22 +4,20 @@ import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
-import com.greencatsoft.angularjs.{ Module, angular }
+import com.greencatsoft.angularjs.Angular
 
 @JSExport
 object TodoApp extends JSApp {
 
   override def main() {
-    val app = angular.module("todomvc", js.Array[String]())
-
-    // Module(app) returns a proxy for our module that provides the bridge for integration
-    // between standard AngularJS and our typesafe + 'fluent' scalajs-angular bindings
-    val module = Module(app)
+    val module = Angular.module("todomvc")
 
     module.controller(TodoCtrl)
+
     module.directive(TodoItemDirective)
     module.directive(EscapeDirective)
     module.directive(FocusDirective)
+
     module.factory(TaskServiceFactory)
   }
 }

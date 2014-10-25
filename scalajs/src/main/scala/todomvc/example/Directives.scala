@@ -4,16 +4,16 @@ import scala.scalajs.js
 import scala.scalajs.js.Any.{ fromFunction0, fromFunction1, fromString }
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.{ undefOr2jsAny, undefOr2ops }
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
 
 import org.scalajs.dom.{ Element, HTMLElement, KeyboardEvent }
 
-import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, Controller, ElementDirective, IsolatedScope, TemplateUrlProvider }
+import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, Controller, ElementDirective, IsolatedScope, TemplatedDirective }
 import com.greencatsoft.angularjs.core.{ Scope, Timeout }
 import com.greencatsoft.angularjs.inject
 
 @JSExport
-object TodoItemDirective extends ElementDirective with TemplateUrlProvider with IsolatedScope {
+object TodoItemDirective extends ElementDirective with TemplatedDirective with IsolatedScope {
 
   override val name = "todoItem"
 

@@ -7,14 +7,14 @@ import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.undefOr2ops
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
 import scala.util.{ Failure, Success }
 
 import org.scalajs.dom.console
 
-import com.greencatsoft.angularjs.AbstractController
-import com.greencatsoft.angularjs.core.{ HttpService, Location, Scope }
-import com.greencatsoft.angularjs.inject
+import com.greencatsoft.angularjs.{ inject, injectable }
+import com.greencatsoft.angularjs.Controller
+import com.greencatsoft.angularjs.core.{ Location, Scope }
 
 /**
  * The main controller for the application.
@@ -29,7 +29,7 @@ import com.greencatsoft.angularjs.inject
  * we mix in traits like `HttpServiceAware` to request these dependencies''
  */
 @JSExport
-object TodoCtrl extends AbstractController("TodoCtrl") {
+object TodoCtrl extends Controller {
 
   @inject
   var location: Location = _
