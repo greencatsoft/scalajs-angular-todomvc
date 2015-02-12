@@ -1,6 +1,5 @@
 package todomvc.example
 
-import scala.scalajs.js
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 

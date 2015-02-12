@@ -4,7 +4,7 @@ import scala.scalajs.js
 import scala.scalajs.js.Any.{ fromFunction0, fromFunction1, fromString }
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.{ undefOr2jsAny, undefOr2ops }
-import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
+import scala.scalajs.js.annotation.JSExport
 
 import org.scalajs.dom.{ Element, KeyboardEvent }
 import org.scalajs.dom.html.Html

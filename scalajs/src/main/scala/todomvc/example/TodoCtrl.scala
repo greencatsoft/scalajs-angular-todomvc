@@ -7,12 +7,12 @@ import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.undefOr2ops
-import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
+import scala.scalajs.js.annotation.JSExport
 import scala.util.{ Failure, Success }
 
 import org.scalajs.dom.console
 
-import com.greencatsoft.angularjs.{ inject, injectable }
+import com.greencatsoft.angularjs.inject
 import com.greencatsoft.angularjs.Controller
 import com.greencatsoft.angularjs.core.{ Location, Scope }
 
