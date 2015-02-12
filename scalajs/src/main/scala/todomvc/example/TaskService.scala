@@ -5,7 +5,6 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 import scala.scalajs.js
 import scala.scalajs.js.{ Date, JSON }
 import scala.scalajs.js.Any.fromString
-import scala.scalajs.js.annotation.JSExportAll
 import scala.util.{ Failure, Success, Try }
 
 import com.greencatsoft.angularjs.Factory
@@ -66,10 +65,8 @@ class TaskService(val http: HttpService) {
   }
 
   protected def flatten[T](future: Future[Try[T]]): Future[T] = future flatMap {
-    _ match {
-      case Success(s) => Future.successful(s)
-      case Failure(f) => Future.failed(f)
-    }
+    case Success(s) => Future.successful(s)
+    case Failure(f) => Future.failed(f)
   }
 }
 

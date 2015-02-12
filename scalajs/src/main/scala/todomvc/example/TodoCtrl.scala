@@ -7,12 +7,12 @@ import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
 import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.undefOr2ops
-import scala.scalajs.js.annotation.{ JSExport, JSExportAll }
+import scala.scalajs.js.annotation.JSExport
 import scala.util.{ Failure, Success }
 
 import org.scalajs.dom.console
 
-import com.greencatsoft.angularjs.{ inject, injectable }
+import com.greencatsoft.angularjs.inject
 import com.greencatsoft.angularjs.Controller
 import com.greencatsoft.angularjs.core.{ Location, Scope }
 
@@ -126,16 +126,16 @@ object TodoCtrl extends Controller {
 
   trait ScopeType extends Scope {
 
-    var todos: js.Array[Task]
+    var todos: js.Array[Task] = js.native
 
-    var newTitle: String
+    var newTitle: String = js.native
 
-    var allChecked: Boolean
+    var allChecked: Boolean = js.native
 
-    var remainingCount: Int
+    var remainingCount: Int = js.native
 
-    var location: Location
+    var location: Location = js.native
 
-    var statusFilter: js.Dynamic
+    var statusFilter: js.Dynamic = js.native
   }
 }

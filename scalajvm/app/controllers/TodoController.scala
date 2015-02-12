@@ -20,7 +20,7 @@ object TodoController extends Controller {
 
   def create() = process(TaskStore.create(_))
 
-  def update(id: Long) = process(TaskStore.update(_))
+  def update(id: Long) = process(TaskStore.update)
 
   def process(updater: Task => Unit) = Action(parse.json) { request =>
     val data = request.body.as[JsObject]
