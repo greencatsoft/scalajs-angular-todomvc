@@ -1,8 +1,8 @@
 import sbt._
 import Keys._
 import play.Play._
-import scala.scalajs.sbtplugin.ScalaJSPlugin._
-import ScalaJSKeys._
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import com.typesafe.sbt.packager.universal.UniversalKeys
 import com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys
 
@@ -11,7 +11,7 @@ import PlayKeys._
 
 object ApplicationBuild extends Build with UniversalKeys {
 
-  scalaVersion in ThisBuild := "2.11.2"
+  scalaVersion in ThisBuild := "2.11.5"
 
   scalacOptions in ThisBuild ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite")
 
@@ -27,6 +27,7 @@ object ApplicationBuild extends Build with UniversalKeys {
   lazy val scalajs = Project(
     id   = "scalajs",
     base = file("scalajs"))
+  .enablePlugins(ScalaJSPlugin)
   .settings(scalajsSettings: _*)
   .settings(
     relativeSourceMaps := true
@@ -45,20 +46,20 @@ object ApplicationBuild extends Build with UniversalKeys {
         jdbc,
         "com.github.benhutchison" %% "prickle" % Versions.prickle,
         "org.squeryl" %% "squeryl" % "0.9.5-7",
-        "org.webjars" % "jquery" % "2.1.1",
-        "org.webjars" % "angularjs" % "1.3.0"
+        "org.webjars" % "jquery" % "2.1.3",
+        "org.webjars" % "angularjs" % "1.3.13"
       ),
       commands += preStartCommand,
       EclipseKeys.skipParents in ThisBuild := false
     ) ++ (
       // ask scalajs project to put its outputs in scalajsOutputDir
-      Seq(packageExternalDepsJS, packageInternalDepsJS, packageExportedProductsJS, packageLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
+      Seq(packageScalaJSLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
         crossTarget in (scalajs, Compile, packageJSKey) := scalajsOutputDir.value
       }
     )
 
   lazy val scalajsSettings =
-    scalaJSSettings ++ Seq(
+    Seq(
       name := "todomvc-client",
       version := Versions.app,
       scalaVersion := Versions.scala,
@@ -68,7 +69,7 @@ object ApplicationBuild extends Build with UniversalKeys {
       libraryDependencies ++= Seq(
         "com.greencatsoft" %%% "scalajs-angular" % Versions.library,
         "com.github.benhutchison" %%% "prickle" % Versions.prickle,
-        "org.scala-lang.modules.scalajs" %% "scalajs-jasmine-test-framework" % scalaJSVersion % "test"
+        "com.greencatsoft" %%% "greenlight" % "0.1-SNAPSHOT" % "test"
       )
     )
 
@@ -87,7 +88,7 @@ object ApplicationBuild extends Build with UniversalKeys {
 
 object Versions {
   val app = "0.3-SNAPSHOT"
-  val library = "0.3-SNAPSHOT"
-  val scala = "2.11.2"
-  val prickle = "1.0.1"
+  val library = "0.4-SNAPSHOT"
+  val scala = "2.11.5"
+  val prickle = "1.1.3"
 }

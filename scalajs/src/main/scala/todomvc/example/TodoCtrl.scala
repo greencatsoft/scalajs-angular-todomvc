@@ -126,16 +126,16 @@ object TodoCtrl extends Controller {
 
   trait ScopeType extends Scope {
 
-    var todos: js.Array[Task]
+    var todos: js.Array[Task] = js.native
 
-    var newTitle: String
+    var newTitle: String = js.native
 
-    var allChecked: Boolean
+    var allChecked: Boolean = js.native
 
-    var remainingCount: Int
+    var remainingCount: Int = js.native
 
-    var location: Location
+    var location: Location = js.native
 
-    var statusFilter: js.Dynamic
+    var statusFilter: js.Dynamic = js.native
   }
 }
