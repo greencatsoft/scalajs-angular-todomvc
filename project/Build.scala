@@ -11,7 +11,7 @@ import PlayKeys._
 
 object ApplicationBuild extends Build with UniversalKeys {
 
-  scalaVersion in ThisBuild := "2.11.5"
+  scalaVersion in ThisBuild := Versions.scala
 
   scalacOptions in ThisBuild ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite")
 
@@ -87,8 +87,8 @@ object ApplicationBuild extends Build with UniversalKeys {
 }
 
 object Versions {
-  val app = "0.3-SNAPSHOT"
-  val library = "0.4-SNAPSHOT"
-  val scala = "2.11.5"
-  val prickle = "1.1.3"
+  val app = "0.4-SNAPSHOT"
+  val library = "0.4"
+  val scala = "2.11.6"
+  val prickle = "1.1.4"
 }
