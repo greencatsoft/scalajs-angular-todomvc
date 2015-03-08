@@ -11,23 +11,28 @@ import PlayKeys._
 
 object ApplicationBuild extends Build with UniversalKeys {
 
-  scalaVersion in ThisBuild := Versions.scala
-
-  scalacOptions in ThisBuild ++= Seq("-deprecation", "-unchecked", "-feature", "-Ymacro-debug-lite")
-
   val scalajsOutputDir = Def.settingKey[File]("Directory for Javascript files output by ScalaJS")
+
+  val commonSettings = Seq(
+  	scalaVersion in ThisBuild := Versions.scala,
+    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
+  )
 
   override def rootProject = Some(scalajvm)
 
   lazy val scalajvm = Project(
     id = "scalajvm",
-    base = file("scalajvm")
-  ) enablePlugins (play.PlayScala) settings (scalajvmSettings: _*) aggregate (scalajs)
+    base = file("scalajvm"))
+  .enablePlugins(play.PlayScala)
+  .settings(commonSettings: _*)
+  .settings(scalajvmSettings: _*)
+  .aggregate(scalajs)
 
   lazy val scalajs = Project(
     id   = "scalajs",
     base = file("scalajs"))
   .enablePlugins(ScalaJSPlugin)
+  .settings(commonSettings: _*)
   .settings(scalajsSettings: _*)
   .settings(
     relativeSourceMaps := true
@@ -87,8 +92,8 @@ object ApplicationBuild extends Build with UniversalKeys {
 }
 
 object Versions {
-  val app = "0.4-SNAPSHOT"
-  val library = "0.4"
+  val app = "0.5-SNAPSHOT"
+  val library = "0.5-SNAPSHOT"
   val scala = "2.11.6"
   val prickle = "1.1.4"
 }

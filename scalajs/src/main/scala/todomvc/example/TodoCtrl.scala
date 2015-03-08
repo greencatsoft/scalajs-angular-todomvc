@@ -9,11 +9,9 @@ import scala.scalajs.js.UndefOr
 import scala.scalajs.js.UndefOr.undefOr2ops
 import scala.scalajs.js.annotation.JSExport
 import scala.util.{ Failure, Success }
-
 import org.scalajs.dom.console
-
-import com.greencatsoft.angularjs.inject
-import com.greencatsoft.angularjs.Controller
+import com.greencatsoft.angularjs.{ inject, injectable }
+import com.greencatsoft.angularjs.AbstractController
 import com.greencatsoft.angularjs.core.{ Location, Scope }
 
 /**
@@ -24,41 +22,27 @@ import com.greencatsoft.angularjs.core.{ Location, Scope }
  *   <li>retrieves and persists the model via the $http service</li>
  *   <li>exposes the model to the template and provides event handlers</li>
  * </ul>
- *
- * ''Note: instead of providing the required dependencies as arguments to a constructor function,
- * we mix in traits like `HttpServiceAware` to request these dependencies''
  */
 @JSExport
-object TodoCtrl extends Controller {
+@injectable("todoCtrl")
+class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
+  extends AbstractController[TodoScope](scope) {
 
-  @inject
-  var location: Location = _
+  // Need to initialize scope properties here, since we cannot declare default values  
+  // for properties of a class which extends js.Object. 
+  scope.todos = js.Array[Task]()
+  scope.newTitle = ""
+  scope.location = location
+  scope.statusFilter = literal()
 
-  @inject
-  var service: TaskService = _
-
-  override def initialize(scope: ScopeType) {
-    // Need to initialize scope properties here, since we cannot declare default values  
-    // for properties of a class which extends js.Object. 
-    scope.todos = js.Array[Task]()
-    scope.newTitle = ""
-    scope.location = location
-    scope.statusFilter = literal()
-
-    scope.$watch("location.path()", (path: UndefOr[String]) =>
-      scope.statusFilter = path.toOption match {
-        case Some("/active") => literal(completed = false)
-        case Some("/completed") => literal(completed = true)
-        case _ => literal()
-      })
-
-    service.findAll() onComplete {
-      case Success(tasks) =>
-        scope.todos = tasks.toJSArray
-        update()
-      case Failure(t) => handleError(t)
-    }
+  service.findAll() onComplete {
+    case Success(tasks) =>
+      scope.todos = tasks.toJSArray
+      update()
+    case Failure(t) => handleError(t)
   }
+
+  def todos: Seq[Task] = scope.todos
 
   @JSExport
   def save(todo: Task) {
@@ -74,7 +58,7 @@ object TodoCtrl extends Controller {
     if (title != "") add(Task(title), scope)
   }
 
-  private def add(todo: Task, scope: ScopeType) {
+  private def add(todo: Task, scope: TodoScope) {
     service.create(todo) onComplete {
       case Success(newTask) =>
         scope.todos :+= newTask
@@ -120,22 +104,7 @@ object TodoCtrl extends Controller {
     scope.allChecked = scope.remainingCount == 0
   }
 
-  private def todos(implicit scope: ScopeType): Seq[Task] = scope.todos
-
-  private def handleError(t: Throwable): Unit = console.error(s"An error has occured: $t")
-
-  trait ScopeType extends Scope {
-
-    var todos: js.Array[Task] = js.native
-
-    var newTitle: String = js.native
-
-    var allChecked: Boolean = js.native
-
-    var remainingCount: Int = js.native
-
-    var location: Location = js.native
-
-    var statusFilter: js.Dynamic = js.native
+  private def handleError(t: Throwable) {
+    console.error(s"An error has occured: $t")
   }
 }

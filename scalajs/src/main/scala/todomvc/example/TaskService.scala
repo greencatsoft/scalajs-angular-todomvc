@@ -7,15 +7,15 @@ import scala.scalajs.js.{ Date, JSON }
 import scala.scalajs.js.Any.fromString
 import scala.util.{ Failure, Success, Try }
 
-import com.greencatsoft.angularjs.Factory
+import com.greencatsoft.angularjs.{ Factory, Service }
 import com.greencatsoft.angularjs.core.HttpPromise.promise2future
 import com.greencatsoft.angularjs.core.HttpService
-import com.greencatsoft.angularjs.{ inject, injectable }
+import com.greencatsoft.angularjs.injectable
 
 import prickle.{ Pickle, Unpickle }
 
-@injectable("$taskService")
-class TaskService(val http: HttpService) {
+@injectable("taskService")
+class TaskService(http: HttpService) extends Service {
   require(http != null, "Missing argument 'http'.")
 
   def findAll(): Future[Seq[Task]] = flatten {
@@ -70,12 +70,8 @@ class TaskService(val http: HttpService) {
   }
 }
 
-object TaskServiceFactory extends Factory[TaskService] {
-
-  override val name = "$taskService"
-
-  @inject
-  var http: HttpService = _
+@injectable("taskService")
+class TaskServiceFactory(http: HttpService) extends Factory[TaskService] {
 
   override def apply(): TaskService = new TaskService(http)
 }

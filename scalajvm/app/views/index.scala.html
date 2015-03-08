@@ -13,7 +13,7 @@
   <style>[ng-cloak] { display: none; }</style>
 </head>
 <body>
-<section id="todoapp" ng-controller="TodoCtrl">
+<section id="todoapp" ng-controller="todoCtrl">
   <header id="header" todo-test="test">
     <h1>todos</h1>
     <form id="todo-form" ng-submit="controller.add()">
@@ -24,7 +24,7 @@
     <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="controller.markAll(allChecked)">
     <label for="toggle-all">Mark all as complete</label>
     <ul id="todo-list">
-      <li ng-repeat="todo in todos | filter:statusFilter track by $index" 
+      <li ng-repeat="todo in todos | statusFilter track by $index" 
         ng-class="{completed: todo.completed}">
         <todo-item item="todo" on-change="controller.save(todo)" on-remove="controller.remove(todo)" />
       </li>

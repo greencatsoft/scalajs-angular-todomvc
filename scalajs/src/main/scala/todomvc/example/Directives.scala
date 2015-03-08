@@ -10,13 +10,12 @@ import org.scalajs.dom.{ Element, KeyboardEvent }
 import org.scalajs.dom.html.Html
 
 import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, Controller, ElementDirective, IsolatedScope, TemplatedDirective }
+import com.greencatsoft.angularjs.{ inject, injectable }
 import com.greencatsoft.angularjs.core.{ Scope, Timeout }
-import com.greencatsoft.angularjs.inject
 
 @JSExport
-object TodoItemDirective extends ElementDirective with TemplatedDirective with IsolatedScope {
-
-  override val name = "todoItem"
+@injectable("todoItem")
+class TodoItemDirective extends ElementDirective with TemplatedDirective with IsolatedScope {
 
   override val templateUrl = "assets/templates/todo-item.html"
 
@@ -26,13 +25,13 @@ object TodoItemDirective extends ElementDirective with TemplatedDirective with I
     "fireOnChange" :& "onChange")
 
   @JSExport
-  def onEditStart(scope: ScopeType) {
+  def onEditStart(scope: TodoItemScope) {
     scope.editing = true
     scope.title = scope.todo.title
   }
 
   @JSExport
-  def onEditEnd(scope: ScopeType) {
+  def onEditEnd(scope: TodoItemScope) {
     scope.editing = false
     scope.todo.title = scope.title
 
@@ -40,48 +39,31 @@ object TodoItemDirective extends ElementDirective with TemplatedDirective with I
   }
 
   @JSExport
-  def onEditCancel(scope: ScopeType) {
+  def onEditCancel(scope: TodoItemScope) {
     scope.editing = false
     scope.title = scope.todo.title
   }
-
-  class ScopeType extends Scope {
-
-    var title: String = js.native
-
-    var editing: Boolean = js.native
-
-    def todo: Task = js.native
-
-    def fireOnRemove(): Unit = js.native
-
-    def fireOnChange(): Unit = js.native
-  }
 }
 
-object EscapeDirective extends AttributeDirective {
+@injectable("todoEscape")
+class EscapeDirective extends AttributeDirective {
 
-  override val name = "todoEscape"
-
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller*) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller[_]*) {
     elems.headOption.map(_.asInstanceOf[Html]) foreach { elem =>
       elem.onkeydown = (event: KeyboardEvent) =>
-        if (event.keyCode == 27) scope.$apply(attrs(name))
+        if (event.keyCode == 27) scope.$apply(attrs("todoEscape"))
     }
   }
 }
 
-object FocusDirective extends AttributeDirective {
+@injectable("todoFocus")
+class FocusDirective(timeout: Timeout) extends AttributeDirective {
+  require(timeout != null, "Missing argument 'timeout'.")
 
-  override val name = "todoFocus"
-
-  @inject
-  var timeout: Timeout = _
-
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller*) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller[_]*) {
     elems.headOption.map(_.asInstanceOf[Html]) foreach { elem =>
 
-      scope.$watch(attrs(name),
+      scope.$watch(attrs("todoFocus"),
         (newVal: UndefOr[js.Any]) => if (newVal.isDefined) timeout(() => elem.focus(), 0, false))
     }
   }
