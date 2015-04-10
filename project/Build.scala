@@ -74,7 +74,7 @@ object ApplicationBuild extends Build with UniversalKeys {
       libraryDependencies ++= Seq(
         "com.greencatsoft" %%% "scalajs-angular" % Versions.library,
         "com.github.benhutchison" %%% "prickle" % Versions.prickle,
-        "com.greencatsoft" %%% "greenlight" % "0.1-SNAPSHOT" % "test"
+        "com.greencatsoft" %%% "greenlight" % "0.2-SNAPSHOT" % "test"
       )
     )
 
