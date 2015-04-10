@@ -9,7 +9,7 @@ import scala.scalajs.js.annotation.JSExport
 import org.scalajs.dom.{ Element, KeyboardEvent }
 import org.scalajs.dom.html.Html
 
-import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, Controller, ElementDirective, IsolatedScope, TemplatedDirective }
+import com.greencatsoft.angularjs.{ AttributeDirective, Attributes, ElementDirective, IsolatedScope, TemplatedDirective }
 import com.greencatsoft.angularjs.{ inject, injectable }
 import com.greencatsoft.angularjs.core.{ Scope, Timeout }
 
@@ -48,7 +48,7 @@ class TodoItemDirective extends ElementDirective with TemplatedDirective with Is
 @injectable("todoEscape")
 class EscapeDirective extends AttributeDirective {
 
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller[_]*) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes) {
     elems.headOption.map(_.asInstanceOf[Html]) foreach { elem =>
       elem.onkeydown = (event: KeyboardEvent) =>
         if (event.keyCode == 27) scope.$apply(attrs("todoEscape"))
@@ -60,7 +60,7 @@ class EscapeDirective extends AttributeDirective {
 class FocusDirective(timeout: Timeout) extends AttributeDirective {
   require(timeout != null, "Missing argument 'timeout'.")
 
-  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes, controllers: Controller[_]*) {
+  override def link(scope: ScopeType, elems: Seq[Element], attrs: Attributes) {
     elems.headOption.map(_.asInstanceOf[Html]) foreach { elem =>
 
       scope.$watch(attrs("todoFocus"),
