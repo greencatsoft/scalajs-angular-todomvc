@@ -94,6 +94,6 @@ object ApplicationBuild extends Build with UniversalKeys {
 object Versions {
   val app = "0.5-SNAPSHOT"
   val library = "0.5-SNAPSHOT"
-  val scala = "2.11.6"
+  val scala = "2.11.7"
   val prickle = "1.1.4"
 }
