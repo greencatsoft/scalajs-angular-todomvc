@@ -22,9 +22,7 @@ class TaskService(http: HttpService) extends Service {
     // Append a timestamp to prevent some old browsers from caching the result.
     val url = parameterizeUrl("/api/todos", Map("ts" -> Date.now))
 
-    val future: Future[js.Any] = http.get(url)
-
-    future
+    http.get[js.Any](url)
       .map(JSON.stringify(_))
       .map(Unpickle[Seq[Task]].fromString(_))
   }
@@ -32,9 +30,7 @@ class TaskService(http: HttpService) extends Service {
   def create(task: Task): Future[Task] = flatten {
     require(task != null, "Missing argument 'task'.")
 
-    val future: Future[js.Any] = http.put(s"/api/todos", Pickle.intoString(task))
-
-    future
+    http.put[js.Any](s"/api/todos", Pickle.intoString(task))
       .map(JSON.stringify(_))
       .map(Unpickle[Task].fromString(_))
   }
@@ -42,19 +38,17 @@ class TaskService(http: HttpService) extends Service {
   def update(task: Task): Future[Task] = flatten {
     require(task != null, "Missing argument 'task'.")
 
-    val future: Future[js.Any] = http.post(s"/api/todos/${task.id}", Pickle.intoString(task))
-
-    future
+    http.post[js.Any](s"/api/todos/${task.id}", Pickle.intoString(task))
       .map(JSON.stringify(_))
       .map(Unpickle[Task].fromString(_))
   }
 
-  def delete(id: Long): Future[Unit] = http.delete(s"/api/todos/$id")
+  def delete(id: Long): Future[Unit] = http.delete[Unit](s"/api/todos/$id")
 
-  def clearAll(): Future[Unit] = http.post("/api/todos/clearAll")
+  def clearAll(): Future[Unit] = http.post[Unit]("/api/todos/clearAll")
 
   def markAll(completed: Boolean): Future[Unit] =
-    http.post(s"/api/todos/markAll?completed=${!completed}")
+    http.post[Unit](s"/api/todos/markAll?completed=${!completed}")
 
   protected def parameterizeUrl(url: String, parameters: Map[String, Any]): String = {
     require(url != null, "Missing argument 'url'.")

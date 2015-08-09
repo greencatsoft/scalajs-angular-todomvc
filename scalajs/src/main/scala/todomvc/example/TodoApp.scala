@@ -11,13 +11,12 @@ object TodoApp extends JSApp {
   override def main() {
     val module = Angular.module("todomvc")
 
-    module.controller[TodoCtrl]
-
-    module.directive[TodoItemDirective]
-    module.directive[EscapeDirective]
-    module.directive[FocusDirective]
-
-    module.filter[StatusFilter]
-    module.factory[TaskServiceFactory]
+    module
+      .controller[TodoCtrl]
+      .directive[TodoItemDirective]
+      .directive[EscapeDirective]
+      .directive[FocusDirective]
+      .filter[StatusFilter]
+      .factory[TaskServiceFactory]
   }
 }

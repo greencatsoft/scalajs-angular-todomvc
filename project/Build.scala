@@ -73,8 +73,7 @@ object ApplicationBuild extends Build with UniversalKeys {
       resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       libraryDependencies ++= Seq(
         "com.greencatsoft" %%% "scalajs-angular" % Versions.library,
-        "com.github.benhutchison" %%% "prickle" % Versions.prickle,
-        "com.greencatsoft" %%% "greenlight" % "0.2-SNAPSHOT" % "test"
+        "com.github.benhutchison" %%% "prickle" % Versions.prickle
       )
     )
 
@@ -92,8 +91,8 @@ object ApplicationBuild extends Build with UniversalKeys {
 }
 
 object Versions {
-  val app = "0.5-SNAPSHOT"
-  val library = "0.5-SNAPSHOT"
+  val app = "0.6-SNAPSHOT"
+  val library = "0.6-SNAPSHOT"
   val scala = "2.11.7"
   val prickle = "1.1.4"
 }
