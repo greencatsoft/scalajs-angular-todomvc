@@ -4,6 +4,7 @@ import scala.scalajs.js
 import com.greencatsoft.angularjs.core.{ Location, Scope }
 import com.greencatsoft.angularjs.injectable
 
+@js.native
 trait TodoScope extends Scope {
 
   var todos: js.Array[Task] = js.native
@@ -19,6 +20,7 @@ trait TodoScope extends Scope {
   var statusFilter: js.Dynamic = js.native
 }
 
+@js.native
 trait TodoItemScope extends Scope {
 
   var title: String = js.native
