@@ -4,7 +4,6 @@ import play.Play._
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import com.typesafe.sbt.packager.universal.UniversalKeys
-import com.typesafe.sbteclipse.core.EclipsePlugin.EclipseKeys
 
 import play.Play.autoImport._
 import PlayKeys._
@@ -54,8 +53,7 @@ object ApplicationBuild extends Build with UniversalKeys {
         "org.webjars" % "jquery" % "2.1.3",
         "org.webjars" % "angularjs" % "1.3.13"
       ),
-      commands += preStartCommand,
-      EclipseKeys.skipParents in ThisBuild := false
+      commands += preStartCommand
     ) ++ (
       // ask scalajs project to put its outputs in scalajsOutputDir
       Seq(packageScalaJSLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
