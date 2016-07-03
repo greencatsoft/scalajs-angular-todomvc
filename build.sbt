@@ -1,6 +1,6 @@
 organization in ThisBuild := "com.greencatsoft"
 
-version in ThisBuild := "0.7-SNAPSHOT"
+version in ThisBuild := "0.8-SNAPSHOT"
 
 scalaVersion in ThisBuild := "2.11.8"
 
