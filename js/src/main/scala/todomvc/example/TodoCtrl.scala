@@ -1,18 +1,16 @@
 package todomvc.example
 
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+import com.greencatsoft.angularjs.core.Location
+import com.greencatsoft.angularjs.{ AbstractController, injectable }
+
+import org.scalajs.dom.console
+
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
-import scala.scalajs.js.Any.{ fromBoolean, fromFunction1, fromString, jsArrayOps, wrapArray }
 import scala.scalajs.js.Dynamic.literal
-import scala.scalajs.js.JSConverters.JSRichGenTraversableOnce
-import scala.scalajs.js.UndefOr
-import scala.scalajs.js.UndefOr.undefOr2ops
+import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.annotation.JSExport
 import scala.util.{ Failure, Success }
-import org.scalajs.dom.console
-import com.greencatsoft.angularjs.{ inject, injectable }
-import com.greencatsoft.angularjs.AbstractController
-import com.greencatsoft.angularjs.core.{ Location, Scope }
 
 /**
  * The main controller for the application.
@@ -25,7 +23,7 @@ import com.greencatsoft.angularjs.core.{ Location, Scope }
  */
 @JSExport
 @injectable("todoCtrl")
-class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
+class TodoCtrl(scope: TodoScope, location: Location, service: TaskServiceProxy)
   extends AbstractController[TodoScope](scope) {
 
   // Need to initialize scope properties here, since we cannot declare default values  
@@ -38,6 +36,7 @@ class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
   service.findAll() onComplete {
     case Success(tasks) =>
       scope.todos = tasks.toJSArray
+
       update()
     case Failure(t) => handleError(t)
   }
@@ -54,12 +53,13 @@ class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
 
   @JSExport
   def add() {
-    val title = scope.newTitle.trim
-    if (title != "") add(Task(title), scope)
+    Option(scope.newTitle).map(_.trim).filter(_.nonEmpty) foreach {
+      add(_, scope)
+    }
   }
 
-  private def add(todo: Task, scope: TodoScope) {
-    service.create(todo) onComplete {
+  private def add(title: String, scope: TodoScope) {
+    service.create(title) onComplete {
       case Success(newTask) =>
         scope.todos :+= newTask
         scope.newTitle = ""
@@ -93,7 +93,8 @@ class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
   def markAll(completed: Boolean) {
     service.markAll(completed) onComplete {
       case Success(_) =>
-        todos.foreach(_.completed = !completed)
+        scope.todos = todos.map(_.complete()).toJSArray
+
         update()
       case Failure(t) => handleError(t)
     }
@@ -105,6 +106,8 @@ class TodoCtrl(scope: TodoScope, location: Location, service: TaskService)
   }
 
   private def handleError(t: Throwable) {
-    console.error(s"An error has occured: $t")
+    console.error(s"An error has occurred: '$t'.")
+
+    t.printStackTrace()
   }
 }

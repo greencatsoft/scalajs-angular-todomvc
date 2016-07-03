@@ -1,8 +1,8 @@
 <div class="view">
-  <input class="toggle" type="checkbox" ng-model="todo.completed" 
-    ng-change="fireOnChange()" />
-  <label ng-dblclick="directive.onEditStart(this)" ng-show="!editing">{{todo.title}}</label>
-  <button class="destroy" ng-click="fireOnRemove()"></button>
+  <input class="toggle" type="checkbox" ng-model="completed"
+    ng-change="directive.onChange(this)" />
+  <label ng-dblclick="directive.onEditStart(this)" ng-show="!editing">{{title}}</label>
+  <button class="destroy" ng-click="directive.onRemove(this)"></button>
 </div>
 <form ng-submit="directive.onEditEnd(this)">
   <input class="edit" ng-trim="false" ng-model="title" 

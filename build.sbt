@@ -30,21 +30,25 @@ lazy val server = todomvc.jvm
     stage <<= stage dependsOn (WebKeys.assets, fullOptJS in (client, Compile)),
     routesGenerator := InjectedRoutesGenerator,
     libraryDependencies ++= Seq(
-      jdbc,
-      evolutions,
+      db.driver,
+      db.slick.api,
+      db.slick.evolutions,
       prickle.jvm,
-      squeryl.api,
-      jquery.api,
-      angular.api))
+      scalaJs.stubs,
+      js.jquery,
+      js.angular))
 
 lazy val client = todomvc.js
   .enablePlugins(ScalaJSPlay)
   .settings(
     name := "todomvc-client",
-    libraryDependencies ++= Seq(angular.scala, prickle.js),
+    libraryDependencies ++= Seq(
+      scalaJs.angular,
+      scalaJs.jquery,
+      prickle.js),
     jsDependencies ++= Seq(
-      jquery.api / "dist/jquery.js" minified "dist/jquery.min.js",
-      angular.api / "angular.js" minified "angular.min.js" dependsOn "dist/jquery.js",
+      js.jquery / "dist/jquery.js" minified "dist/jquery.min.js",
+      js.angular / "angular.js" minified "angular.min.js" dependsOn "dist/jquery.js",
       RuntimeDOM),
     persistLauncher := true,
     relativeSourceMaps := true,

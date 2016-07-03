@@ -1,8 +1,9 @@
 package todomvc.example
 
-import scala.scalajs.js
 import com.greencatsoft.angularjs.core.{ Location, Scope }
-import com.greencatsoft.angularjs.injectable
+
+import scala.scalajs.js
+import scala.scalajs.js.Dictionary
 
 @js.native
 trait TodoScope extends Scope {
@@ -25,11 +26,13 @@ trait TodoItemScope extends Scope {
 
   var title: String = js.native
 
+  var completed: Boolean = js.native
+
   var editing: Boolean = js.native
 
-  def todo: Task = js.native
+  var todo: Task = js.native
 
-  def fireOnRemove(): Unit = js.native
+  def fireOnRemove(arg: Dictionary[Task]): Unit = js.native
 
-  def fireOnChange(): Unit = js.native
+  def fireOnChange(arg: Dictionary[Task]): Unit = js.native
 }

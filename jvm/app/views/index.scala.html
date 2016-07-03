@@ -26,7 +26,7 @@
     <ul id="todo-list">
       <li ng-repeat="todo in todos | statusFilter track by $index" 
         ng-class="{completed: todo.completed}">
-        <todo-item item="todo" on-change="controller.save(todo)" on-remove="controller.remove(todo)" />
+        <todo-item item="todo" on-change="controller.save(task)" on-remove="controller.remove(task)" />
       </li>
     </ul>
   </section>
