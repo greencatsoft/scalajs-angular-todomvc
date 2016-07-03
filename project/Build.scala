@@ -50,8 +50,8 @@ object ApplicationBuild extends Build with UniversalKeys {
         jdbc,
         "com.github.benhutchison" %% "prickle" % Versions.prickle,
         "org.squeryl" %% "squeryl" % "0.9.5-7",
-        "org.webjars" % "jquery" % "2.1.3",
-        "org.webjars" % "angularjs" % "1.3.13"
+        "org.webjars" % "jquery" % "2.2.4",
+        "org.webjars" % "angularjs" % "1.5.7"
       ),
       commands += preStartCommand
     ) ++ (
@@ -91,6 +91,6 @@ object ApplicationBuild extends Build with UniversalKeys {
 object Versions {
   val app = "0.7-SNAPSHOT"
   val library = "0.7-SNAPSHOT"
-  val scala = "2.11.7"
-  val prickle = "1.1.4"
+  val scala = "2.11.8"
+  val prickle = "1.1.10"
 }
