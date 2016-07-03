@@ -1,9 +1,10 @@
-import org.squeryl.{ Session, SessionFactory }
-import org.squeryl.internals.DatabaseAdapter
+package todomvc.example
 
+import org.squeryl.internals.DatabaseAdapter
+import org.squeryl.{Session, SessionFactory}
 import play.api
-import play.api.{ GlobalSettings, Logger }
 import play.api.db.DB
+import play.api.{GlobalSettings, Logger, Play}
 
 object Application extends GlobalSettings {
 
@@ -21,6 +22,7 @@ object Application extends GlobalSettings {
     val adapterConf = app.configuration.getString(AdapterConfKey)
 
     val adapterClass = adapterConf getOrElse {
+      val configuration = Play.current.configuration
       throw configuration.reportError(AdapterConfKey, s"Missing configuration '$AdapterConfKey'.")
     }
 

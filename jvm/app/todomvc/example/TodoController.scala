@@ -1,12 +1,11 @@
-package controllers
-
-import scala.util.{ Failure, Success }
+package todomvc.example
 
 import play.api.libs.json.JsObject
 import play.api.mvc.{ Action, Controller }
 import prickle.{ Pickle, Unpickle }
-import todomvc.example.{ Task, TaskStore }
 import views.html.index
+
+import scala.util.{ Failure, Success }
 
 object TodoController extends Controller {
 
