@@ -1,12 +1,15 @@
 package todomvc.example
 
+import javax.inject.{ Inject, Singleton }
+
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.PrimitiveTypeMode.update
 
 import play.api.Logger
+
 import todomvc.example.TaskSchema.tasks
 
-object TaskStore {
+@Singleton
+class TaskStore @Inject() () {
 
   def create(task: Task): Task = {
     require(task != null, "Missing argument 'task'.")

@@ -28,7 +28,7 @@ lazy val server = todomvc.jvm
     pipelineStages := Seq(scalaJSProd),
     scalaJSProjects := Seq(todomvc.js),
     stage <<= stage dependsOn (WebKeys.assets, fullOptJS in (client, Compile)),
-    routesGenerator := StaticRoutesGenerator,
+    routesGenerator := InjectedRoutesGenerator,
     libraryDependencies ++= Seq(
       jdbc,
       evolutions,
