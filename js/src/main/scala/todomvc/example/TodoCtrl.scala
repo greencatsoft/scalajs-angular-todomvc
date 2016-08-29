@@ -97,8 +97,7 @@ class TodoCtrl(
   def markAll(completed: Boolean) {
     service.markAll(completed) onComplete {
       case Success(_) =>
-        scope.todos = todos.map(_.complete()).toJSArray
-
+        scope.todos = todos.map(_.complete(completed)).toJSArray
         update()
       case Failure(t) => handleError(t)
     }
