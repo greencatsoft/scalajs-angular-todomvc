@@ -50,7 +50,13 @@ class TodoCtrl(
   @JSExport
   def save(todo: Task) {
     service.update(todo) onComplete {
-      case Success(_) => update()
+      case Success(task) =>
+        scope.todos = scope.todos map {
+          case t if t.id == task.id => task
+          case t => t
+        }
+
+        update()
       case Failure(t) => handleError(t)
     }
   }

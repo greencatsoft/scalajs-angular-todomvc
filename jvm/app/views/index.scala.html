@@ -23,7 +23,7 @@
     <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="controller.markAll(allChecked)">
     <label for="toggle-all">Mark all as complete</label>
     <ul id="todo-list">
-      <li ng-repeat="todo in todos | statusFilter track by $index" 
+      <li ng-repeat="todo in todos | statusFilter"
         ng-class="{completed: todo.completed}">
         <todo-item item="todo" on-change="controller.save(task)" on-remove="controller.remove(task)" />
       </li>
