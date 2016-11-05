@@ -1,10 +1,8 @@
 package todomvc.example
 
-import com.greencatsoft.angularjs.core.{ Location, Timeout }
-import com.greencatsoft.angularjs.{ AngularExecutionContextProvider, AbstractController, injectable }
-
+import com.greencatsoft.angularjs.core.{ ExceptionHandler, Location, Timeout }
+import com.greencatsoft.angularjs.{ AbstractController, AngularExecutionContextProvider, injectable }
 import org.scalajs.dom.console
-
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters._
@@ -26,9 +24,15 @@ class TodoCtrl(
   scope: TodoScope,
   location: Location,
   service: TaskServiceProxy,
-  val timeout: Timeout)
+  val timeout: Timeout,
+  val exceptionHandler: ExceptionHandler)
   extends AbstractController[TodoScope](scope)
   with AngularExecutionContextProvider {
+  require(scope != null, "Missing argument 'scope'.")
+  require(location != null, "Missing argument 'location'.")
+  require(service != null, "Missing argument 'service'.")
+  require(timeout != null, "Missing argument 'timeout'.")
+  require(exceptionHandler != null, "Missing argument 'exceptionHandler'.")
 
   // Need to initialize scope properties here, since we cannot declare default values  
   // for properties of a class which extends js.Object. 

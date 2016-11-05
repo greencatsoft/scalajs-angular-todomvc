@@ -1,19 +1,22 @@
 package todomvc.example
 
 import com.greencatsoft.angularjs
-import com.greencatsoft.angularjs.core.{ HttpService, Timeout }
+import com.greencatsoft.angularjs.core.{ ExceptionHandler, HttpService, Timeout }
 import com.greencatsoft.angularjs.{ AngularExecutionContextProvider, Service, injectable }
-
 import prickle.Unpickle
-
 import scala.concurrent.Future
+
 import scala.scalajs.js.{ Date, JSON }
 
 @injectable("taskService")
-class TaskServiceProxy(val http: HttpService, val timeout: Timeout) extends TaskService
+class TaskServiceProxy(
+  val http: HttpService,
+  val timeout: Timeout,
+  val exceptionHandler: ExceptionHandler) extends TaskService
   with HttpClientSupport with AngularExecutionContextProvider with Service {
   require(http != null, "Missing argument 'http'.")
   require(timeout != null, "Missing argument 'timeout'.")
+  require(exceptionHandler != null, "Missing argument 'exceptionHandler'.")
 
   override def findAll(): Future[Seq[Task]] = flatten {
     // Append a timestamp to prevent some old browsers from caching the result.
@@ -49,16 +52,16 @@ class TaskServiceProxy(val http: HttpService, val timeout: Timeout) extends Task
   }
 
   override def markAll(completed: Boolean): Future[Unit] = {
-    httpPost(s"/api/todos/markAll?completed=${!completed}") map { _ => }
+    httpPost(s"/api/todos/markAll?completed=${ !completed }") map { _ => }
   }
 }
 
 object TaskServiceProxy {
 
   @injectable("taskService")
-  class Factory(http: HttpService, timeout: Timeout)
+  class Factory(http: HttpService, timeout: Timeout, exceptionHandler: ExceptionHandler)
     extends angularjs.Factory[TaskService] {
 
-    override def apply(): TaskService = new TaskServiceProxy(http, timeout)
+    override def apply(): TaskService = new TaskServiceProxy(http, timeout, exceptionHandler)
   }
 }
