@@ -2,6 +2,7 @@ package todomvc.example
 
 import javax.inject.{ Inject, Singleton }
 
+import play.api.Environment
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -10,14 +11,15 @@ import play.api.mvc.{ Action, Controller }
 import views.html.index
 
 @Singleton
-class TodoController @Inject() (store: TaskServiceImpl) extends Controller
+class TodoController @Inject() (store: TaskServiceImpl, env: Environment) extends Controller
   with MarshallingSupport {
   require(store != null, "Missing argument 'store'.")
+  require(env != null, "Missing argument 'env'.")
 
   import TodoController._
 
   def home() = Action {
-    Ok(index())
+    Ok(index(env.mode))
   }
 
   def list() = Action async {
