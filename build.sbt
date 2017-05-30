@@ -2,7 +2,7 @@ organization in ThisBuild := "com.greencatsoft"
 
 version in ThisBuild := "0.8-SNAPSHOT"
 
-scalaVersion in ThisBuild := "2.11.8"
+scalaVersion in ThisBuild := "2.11.11"
 
 scalacOptions in ThisBuild ++= Seq("-deprecation", "-unchecked", "-feature")
 
@@ -65,3 +65,5 @@ lazy val todomvc = (crossProject in file("."))
       Seq((scalaSource in Test).value) ++
         crossType.sharedSrcDir(baseDirectory.value, "test"),
     testOptions in Test := Seq(Tests.Filter(_.endsWith("Test"))))
+
+ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }

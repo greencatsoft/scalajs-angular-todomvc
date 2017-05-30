@@ -3,9 +3,9 @@ package todomvc.example
 import com.greencatsoft.angularjs.Angular
 
 import scala.scalajs.js.JSApp
-import scala.scalajs.js.annotation.JSExport
+import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
-@JSExport
+@JSExportTopLevel("TodoApp")
 object TodoApp extends JSApp {
 
   override def main() {

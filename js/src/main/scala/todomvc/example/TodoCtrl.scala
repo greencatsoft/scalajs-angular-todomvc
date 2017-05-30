@@ -1,13 +1,14 @@
 package todomvc.example
 
-import com.greencatsoft.angularjs.core.{ ExceptionHandler, Location, Timeout }
-import com.greencatsoft.angularjs.{ AbstractController, AngularExecutionContextProvider, injectable }
+import com.greencatsoft.angularjs.core.{ExceptionHandler, Location, Timeout}
+import com.greencatsoft.angularjs.{AbstractController, AngularExecutionContextProvider, injectable}
 import org.scalajs.dom.console
+
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters._
-import scala.scalajs.js.annotation.JSExport
-import scala.util.{ Failure, Success }
+import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+import scala.util.{Failure, Success}
 
 /**
  * The main controller for the application.
@@ -18,7 +19,7 @@ import scala.util.{ Failure, Success }
  *   <li>exposes the model to the template and provides event handlers</li>
  * </ul>
  */
-@JSExport
+@JSExportTopLevel("TodoCtrl")
 @injectable("todoCtrl")
 class TodoCtrl(
   scope: TodoScope,
