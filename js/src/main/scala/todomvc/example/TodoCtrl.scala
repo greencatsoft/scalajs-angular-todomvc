@@ -1,22 +1,22 @@
 package todomvc.example
 
-import com.greencatsoft.angularjs.core.{ExceptionHandler, Location, Timeout}
-import com.greencatsoft.angularjs.{AbstractController, AngularExecutionContextProvider, injectable}
+import com.greencatsoft.angularjs.core.{ ExceptionHandler, Location, Timeout }
+import com.greencatsoft.angularjs.{ AbstractController, AngularExecutionContextProvider, injectable }
 import org.scalajs.dom.console
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
 import scala.scalajs.js.JSConverters._
-import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
-import scala.util.{Failure, Success}
+import scala.scalajs.js.annotation.{ JSExport, JSExportTopLevel }
+import scala.util.{ Failure, Success }
 
 /**
  * The main controller for the application.
  *
  * The controller
  * <ul>
- *   <li>retrieves and persists the model via the $http service</li>
- *   <li>exposes the model to the template and provides event handlers</li>
+ * <li>retrieves and persists the model via the $http service</li>
+ * <li>exposes the model to the template and provides event handlers</li>
  * </ul>
  */
 @JSExportTopLevel("TodoCtrl")
@@ -28,7 +28,7 @@ class TodoCtrl(
   val timeout: Timeout,
   val exceptionHandler: ExceptionHandler)
   extends AbstractController[TodoScope](scope)
-  with AngularExecutionContextProvider {
+    with AngularExecutionContextProvider {
   require(scope != null, "Missing argument 'scope'.")
   require(location != null, "Missing argument 'location'.")
   require(service != null, "Missing argument 'service'.")

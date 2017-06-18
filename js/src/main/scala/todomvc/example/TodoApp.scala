@@ -3,7 +3,7 @@ package todomvc.example
 import com.greencatsoft.angularjs.Angular
 
 import scala.scalajs.js.JSApp
-import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+import scala.scalajs.js.annotation.{ JSExport, JSExportTopLevel }
 
 @JSExportTopLevel("TodoApp")
 object TodoApp extends JSApp {

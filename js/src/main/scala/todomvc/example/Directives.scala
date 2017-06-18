@@ -3,11 +3,11 @@ package todomvc.example
 import com.greencatsoft.angularjs.core.Timeout
 import com.greencatsoft.angularjs._
 import org.scalajs.dom.html.Html
-import org.scalajs.dom.{Element, KeyboardEvent}
+import org.scalajs.dom.{ Element, KeyboardEvent }
 
 import scala.scalajs.js
-import scala.scalajs.js.{Dictionary, UndefOr}
-import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+import scala.scalajs.js.{ Dictionary, UndefOr }
+import scala.scalajs.js.annotation.{ JSExport, JSExportTopLevel }
 
 @JSExportTopLevel("TodoItemDirective")
 @injectable("todoItem")
