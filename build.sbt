@@ -1,3 +1,5 @@
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
 organization in ThisBuild := "com.greencatsoft"
 
 version in ThisBuild := "0.8-SNAPSHOT"
@@ -16,7 +18,7 @@ lazy val root = project.in(file("."))
   .aggregate(client, server)
   .settings(
     name := "todomvc",
-    run in Compile <<= (run in Compile in server))
+    run in Compile := (run in Compile in server).evaluated)
 
 lazy val server = todomvc.jvm
   .enablePlugins(PlayScala)
@@ -27,7 +29,7 @@ lazy val server = todomvc.jvm
     },
     pipelineStages := Seq(scalaJSProd),
     scalaJSProjects := Seq(todomvc.js),
-    stage <<= stage dependsOn (WebKeys.assets, fullOptJS in (client, Compile)),
+    stage := { stage dependsOn(WebKeys.assets, fullOptJS in(client, Compile)) }.value,
     routesGenerator := InjectedRoutesGenerator,
     libraryDependencies ++= Seq(
       db.driver,
@@ -55,7 +57,9 @@ lazy val client = todomvc.js
     skip in packageJSDependencies := false,
     jsEnv in Test := PhantomJSEnv(args = Seq("--web-security=no")).value)
 
-lazy val todomvc = (crossProject in file("."))
+lazy val todomvc = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Full)
+  .in(file("."))
   .settings(
     name := "todomvc-common",
     unmanagedSourceDirectories in Compile :=
