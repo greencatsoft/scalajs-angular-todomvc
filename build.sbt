@@ -16,7 +16,7 @@ lazy val root = project.in(file("."))
   .aggregate(client, server)
   .settings(
     name := "todomvc",
-    run in Compile <<= (run in Compile in server))
+    run in Compile := (run in Compile in server).evaluated)
 
 lazy val server = todomvc.jvm
   .enablePlugins(PlayScala)
@@ -27,7 +27,7 @@ lazy val server = todomvc.jvm
     },
     pipelineStages := Seq(scalaJSProd),
     scalaJSProjects := Seq(todomvc.js),
-    stage <<= stage dependsOn (WebKeys.assets, fullOptJS in (client, Compile)),
+    stage := { stage dependsOn(WebKeys.assets, fullOptJS in(client, Compile)) }.value,
     routesGenerator := InjectedRoutesGenerator,
     libraryDependencies ++= Seq(
       db.driver,
