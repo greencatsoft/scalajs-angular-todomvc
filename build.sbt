@@ -1,3 +1,5 @@
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
 organization in ThisBuild := "com.greencatsoft"
 
 version in ThisBuild := "0.8-SNAPSHOT"
@@ -55,7 +57,9 @@ lazy val client = todomvc.js
     skip in packageJSDependencies := false,
     jsEnv in Test := PhantomJSEnv(args = Seq("--web-security=no")).value)
 
-lazy val todomvc = (crossProject in file("."))
+lazy val todomvc = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Full)
+  .in(file("."))
   .settings(
     name := "todomvc-common",
     unmanagedSourceDirectories in Compile :=

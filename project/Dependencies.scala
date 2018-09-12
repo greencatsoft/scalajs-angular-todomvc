@@ -1,12 +1,13 @@
 import sbt._
+import org.scalajs.sbtplugin.ScalaJSCrossVersion
 import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport._
 
 object Dependencies {
 
   object scalaJs {
     def stubs = "org.scala-js" %% "scalajs-stubs" % scalaJSVersion
-    def angular = "com.greencatsoft" %%%! "scalajs-angular" % "0.8-SNAPSHOT"
-    def jquery = "be.doeraene" %%%! "scalajs-jquery" % "0.9.0"
+    def angular = "com.greencatsoft" % "scalajs-angular" % "0.8-SNAPSHOT" cross ScalaJSCrossVersion.binary
+    def jquery = "be.doeraene" % "scalajs-jquery" % "0.9.0" cross ScalaJSCrossVersion.binary
   }
 
   object js {
@@ -17,7 +18,7 @@ object Dependencies {
   object prickle {
     val version = "1.1.10"
 
-    def js = "com.github.benhutchison" %%%! "prickle" % version
+    def js = "com.github.benhutchison" % "prickle" % version cross ScalaJSCrossVersion.binary
     def jvm = "com.github.benhutchison" %% "prickle" % version
   }
 
