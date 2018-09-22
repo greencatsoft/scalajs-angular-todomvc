@@ -1,6 +1,6 @@
-@(mode: play.api.Mode.Mode)
+@(mode: play.api.Mode)
 <!DOCTYPE html>
-<html lang="en" ng-app="todomvc" data-framework="angularjs">
+<html lang="en" ng-app="todomvc" data-framework="angularjs" ng-csp>
 <head>
   <meta charset="utf-8">
   <title>AngularJS Binding for Scala.js :: TodoMVC Example</title>
@@ -15,7 +15,7 @@
   }
 
   <script src="@routes.Assets.versioned("todomvc-client-launcher.js")"></script>
-  <style>[ng-cloak] { display: none; }</style>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/angular-csp.css")">
 </head>
 <body>
 <section id="todoapp" ng-controller="todoCtrl">

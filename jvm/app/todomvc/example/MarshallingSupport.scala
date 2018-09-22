@@ -2,14 +2,14 @@ package todomvc.example
 
 import play.api.http.Writeable
 import play.api.libs.json._
-import play.api.mvc.{ Codec, Controller }
+import play.api.mvc.{ BaseController, Codec }
 
 import prickle.{ Pickle, Pickler, Unpickle, Unpickler }
 
 import scala.util.{ Failure, Success }
 
 trait MarshallingSupport {
-  this: Controller =>
+  this: BaseController =>
 
   implicit def modelReads[A](implicit unpickler: Unpickler[A]): Reads[A] = {
     new Reads[A] {

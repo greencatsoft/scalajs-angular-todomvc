@@ -1,25 +1,33 @@
 package todomvc.example
 
+import scala.concurrent.ExecutionContext
+
 import javax.inject.{ Inject, Singleton }
 
 import play.api.Environment
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{ Action, Controller }
+import play.api.mvc.{ BaseController, ControllerComponents, Request }
+import play.filters.csrf.CSRF
 
 import views.html.index
 
 @Singleton
-class TodoController @Inject() (store: TaskServiceImpl, env: Environment) extends Controller
+class TodoController @Inject()(val controllerComponents: ControllerComponents,
+  store: TaskServiceImpl, env: Environment)(implicit ec: ExecutionContext) extends BaseController
   with MarshallingSupport {
   require(store != null, "Missing argument 'store'.")
   require(env != null, "Missing argument 'env'.")
 
   import TodoController._
 
-  def home() = Action {
+  def home() = Action { implicit request =>
+    accessToken // request is passed implicitly to accessToken
     Ok(index(env.mode))
+  }
+
+  def accessToken(implicit request: Request[_]) = {
+    val token = CSRF.getToken // request is passed implicitly to CSRF.getToken
   }
 
   def list() = Action async {

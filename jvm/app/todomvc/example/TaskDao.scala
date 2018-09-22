@@ -5,11 +5,11 @@ import javax.inject.{ Inject, Singleton }
 import play.api.db.slick.DatabaseConfigProvider
 
 @Singleton
-class TaskDao @Inject() (val dbConfigProvider: DatabaseConfigProvider)
+class TaskDao @Inject()(val dbConfigProvider: DatabaseConfigProvider)
   extends DatabaseSupport {
   require(dbConfigProvider != null, "Missing argument 'dbConfigProvider'.")
 
-  import dbConfig.driver.api._
+  import dbConfig.profile.api._
 
   val tasks: TableQuery[Schema] = TableQuery[Schema]
 
@@ -36,4 +36,5 @@ class TaskDao @Inject() (val dbConfigProvider: DatabaseConfigProvider)
       Some((id, title, completed))
     }
   }
+
 }

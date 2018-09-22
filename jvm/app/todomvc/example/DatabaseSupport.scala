@@ -2,8 +2,8 @@ package todomvc.example
 
 import play.api.db.slick.DatabaseConfigProvider
 
-import slick.backend.DatabaseConfig
-import slick.driver.JdbcProfile
+import slick.basic.DatabaseConfig
+import slick.jdbc.JdbcProfile
 
 trait DatabaseSupport {
 
