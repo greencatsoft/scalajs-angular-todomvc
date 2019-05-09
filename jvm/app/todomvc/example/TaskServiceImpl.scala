@@ -1,18 +1,17 @@
 package todomvc.example
 
+import scala.concurrent.{ ExecutionContext, Future }
+
 import javax.inject.{ Inject, Singleton }
 
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.Logger
 
-import scala.concurrent.Future
-
 @Singleton
-class TaskServiceImpl @Inject() (dao: TaskDao) extends TaskService {
+class TaskServiceImpl @Inject()(dao: TaskDao)(implicit ec: ExecutionContext) extends TaskService {
   require(dao != null, "Missing argument 'dao'.")
 
   import dao.dbConfig.db
-  import dao.dbConfig.driver.api._
+  import dao.dbConfig.profile.api._
   import dao.tasks
 
   override def create(title: String): Future[Task] = {

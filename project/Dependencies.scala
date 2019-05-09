@@ -26,7 +26,7 @@ object Dependencies {
     def driver = "com.h2database" % "h2" % "1.4.192"
 
     object slick {
-      val version = "2.0.0"
+      val version = "3.0.3"
 
       def api = "com.typesafe.play" %% "play-slick" % version
       def evolutions = "com.typesafe.play" %% "play-slick-evolutions" % version

@@ -32,6 +32,7 @@ lazy val server = todomvc.jvm
     stage := { stage dependsOn(WebKeys.assets, fullOptJS in(client, Compile)) }.value,
     routesGenerator := InjectedRoutesGenerator,
     libraryDependencies ++= Seq(
+      guice,
       db.driver,
       db.slick.api,
       db.slick.evolutions,
