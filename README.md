@@ -23,6 +23,13 @@ $ sbt
 $ open http://localhost:9000
 ```
 
+## Runing the Application in docker
+```shell
+$ sbt docker:publishLocal
+$ docker run --rm -p9000:9000 todomvc-server:0.8-SNAPSHOT
+$ open http://localhost:9000
+```
+
 [scalajs]: http://www.scala-js.org
 [scalajs-angular]: https://github.com/greencatsoft/scalajs-angular
 [todomvc]: http://todomvc.com
