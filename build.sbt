@@ -72,3 +72,26 @@ lazy val todomvc = crossProject(JSPlatform, JVMPlatform)
     testOptions in Test := Seq(Tests.Filter(_.endsWith("Test"))))
 
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+
+
+// ##
+enablePlugins(JavaAppPackaging)
+// Disable javadoc packaging
+mappings in (Compile, packageDoc) := Seq()
+
+//Oops, cannot start the server.
+//java.nio.file.AccessDeniedException: /opt/docker/RUNNING_PID
+//https://stackoverflow.com/questions/56153102/why-is-my-docker-image-of-my-play-framework-for-scala-app-not-starting-with-an-a
+javaOptions in Universal ++= Seq(
+  "-Dpidfile.path=/dev/null"
+)
+
+// docker packaging configuration
+enablePlugins(DockerPlugin)
+enablePlugins(AshScriptPlugin)
+mainClass in Compile := Some("todomvc.example.TodoApp")
+dockerBaseImage      := "openjdk:8-jre-alpine"
+
+// workaround for https://github.com/sbt/sbt-native-packager/issues/1202
+daemonUserUid in Docker := None
+daemonUser in Docker    := "daemon"
